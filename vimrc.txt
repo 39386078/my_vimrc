@@ -1,0 +1,298 @@
+" 39386078@qq.com
+" F2 tree
+" F3 ctags creation
+" F5 make[FileName] with [FileName].out when MakeFile Does Not Exist<CR>
+" Command+R Run
+" F6 step out
+" F7 step in
+" F8 Break Point current line
+" F9 Mini buff Explorer— Pre File
+" F10 Mini buff Explorer - Next File
+" F12 change color scheme
+
+"set makeprg=nmake\ -f\ makefile.mak
+"set tags=tags;
+"set tags+=./tags “add current directory'sgenerated tags file
+
+set shortmess=atI
+set mouse=a
+set autoindent
+set smartindent				" 开启新行时使用智能自动缩进
+set tabstop=4				" 设定 tab 长度为 4
+set shiftwidth=4			" 设定 << 和 >> 命令移动时的宽度为 4
+set bs=2					" insert模式 退格键可删除
+set autoread				" 文件在Vim之外修改过，自动重新读入
+set softtabstop=4			" 使得按退格键时可以一次删掉 4 个空格
+set helplang=cn		        " 帮助系统设置为中文
+set hls                     " 检索时高亮显示匹配项
+set incsearch               " 输入搜索内容时就显示搜索结果
+
+syntax on                   " 自动语法高亮
+syntax enable
+
+set nobackup                " 覆盖文件时不备份
+set autochdir               " 自动切换当前目录为当前文件所在的目录
+set backupcopy=yes          " 设置备份时的行为为覆盖
+
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1,gbk
+set fileencoding=utf-8
+set encoding=utf-8
+
+
+set number                  " 显示行号
+set ruler                   " 打开状态栏标尺
+set hidden					" 允许在有未保存的修改时切换缓冲区，此时的修改由 vim 负责保存
+
+set ignorecase smartcase    " 搜索时忽略大小写，但在有一个或以上大写字母时仍保持对大小写敏感
+set nowrapscan              " 禁止在搜索到文件两端时重新搜索
+set hlsearch                " 搜索时高亮显示被找到的文本
+
+
+
+
+imap { {}<ESC>i<CR><ESC>V<O
+
+set cursorline
+hi CursorLine  cterm=NONE ctermbg=darkred ctermfg=white
+hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white
+
+
+
+filetype plugin indent on
+
+call plug#begin('~/.vim/plugged')
+
+"=============================================================================================================
+" Apple LLVM LLDB
+Plug 'tpope/vim-pathogen'
+Plug 'gilligan/vim-lldb'
+
+" TODO:
+" ^+Command +Y " Pause/Continue
+map <F7> :Lnext<CR>
+map <F6> :Lstepin<CR> 
+" Continue to CurrentLine
+" Step Over
+" Step into
+" Step Out
+" Step Over Instruction
+" Step Over Thread
+" Step Into Instruction
+" Step Into Thread
+map <F8> :Lbreakpoint<CR> 
+
+
+"=============================================================================================================
+Plug 'mbbill/undotree'
+Plug 'tpope/vim-surround'
+Plug 'Shougo/neocomplete'
+
+"=============================================================================================================
+Plug 'Valloric/YouCompleteMe'
+	let g:SuperTabDefaultCompletionType="context"
+"cd ~/.vim/bundle/YoucompleteMe
+"./install.py --clang-completer --system-libclang --system-boost --omnisharp-completer
+"cp third_party/ycmd/examples/.ycm_extra_conf.py ~/
+"=============================================================================================================
+
+Plug 'powerman/vim-plugin-viewdoc'
+Plug 'STL-improved'
+Plug 'vim-scripts/YankRing.vim'
+Plug 'tczengming/autoload_cscope.vim'
+Plug 'kien/ctrlp.vim'
+Plug 'DoxygenToolkit.vim'
+Plug 'a.vim'
+
+"Plug 'airblade/vim-gitgutter'
+"Plug 'chrisbra/csv.vim'
+"Plug 'mhinz/vim-signify'
+"Plug 'edkolev/tmuxline.vim'
+"	let g:tmuxline_preset = 'full'
+"Plug 'ShowMarks.vim'
+"Plug 'kana/vim-smartinput.vim'
+"Plug 'tpope/vim-surround.vim'
+"Plug 'bronson/vim-trailing-whitespace.vim'
+"Plug 'jistr/vim-nerdtree-tabs.vim'
+"Plug 'easymotion/vim-easymotion.vim'
+"Plug 'SirVer/ultisnips.vim'
+"Plug 'kien/rainbow_parentheses.vim'"
+"=============================================================================================================
+"Plug 'fholgado/minibufexpl.vim'
+"	hi MBENormal               guifg=#808080 guibg=fg
+"	hi MBEChanged              guifg=#CD5907 guibg=fg
+"	hi MBEVisibleNormal        guifg=#5DC2D6 guibg=fg
+"	hi MBEVisibleChanged       guifg=#F1266F guibg=fg
+"	hi MBEVisibleActiveNormal  guifg=#A6DB29 guibg=fg
+"	hi MBEVisibleActiveChanged guifg=#F1266F guibg=fg
+
+"=============================================================================================================
+if has("gui_running")
+	set showtabline=2
+	set guioptions+=e
+else
+	Plug 'bling/vim-bufferline'	
+	let g:bufferline_echo = 1
+	let g:bufferline_active_buffer_left = ''
+	let g:bufferline_active_buffer_right = '|'
+	let g:bufferline_modified = '+'
+	let g:bufferline_show_bufnr = 0
+	autocmd VimEnter *let &statusline='%{bufferline#refresh_status()}'.bufferline#get_status_string()
+endif
+"=============================================================================================================
+Plug 'majutsushi/tagbar'
+	let g:tagbar_width = 40
+	autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+	map <F3> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>  	
+
+"=============================================================================================================
+Plug 'scrooloose/nerdcommenter'	
+
+"=============================================================================================================
+Plug 'scrooloose/nerdtree'
+	" NERDTress File highlighting
+	function! NERDTreeHighlightFile(extension, fg, bg)
+		exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+		exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:bg .' guifg='. a:fg
+	endfunction
+	
+	autocmd StdinReadPre * let s:std_in=1
+	autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+	autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+	
+	autocmd VimEnter * NERDTree
+	map <F2> :NERDTreeToggle<CR>
+
+	call NERDTreeHighlightFile('sh*', 'red', 'black')
+	call NERDTreeHighlightFile('jade', 'green', 'black')
+	call NERDTreeHighlightFile('html', 'green', 'black')
+	call NERDTreeHighlightFile('styl', 'green', 'black')
+	call NERDTreeHighlightFile('css', 'green', 'black')
+	call NERDTreeHighlightFile('coffee', 'cyan', 'black')
+
+	let g:NERDTreeDirArrowExpandable = '▸'
+	let g:NERDTreeDirArrowCollapsible = '▾'
+
+"=============================================================================================================
+Plug 'Xuyuanp/nerdtree-git-plugin'
+	let g:NERDTreeIndicatorMapCustom = {
+		    \ "Modified"  : "✹",
+			\ "Staged"    : "✚",
+			\ "uNTRACKED" : "✭",
+			\ "Renamed"   : "➜",
+			\ "Unmerged"  : "═",
+			\ "Deleted"   : "✖",
+			\ "Dirty"     : "✗",
+			\ "Clean"     : "✔︎",
+			\ "Unknown"   : "?"
+			\ }
+
+"=============================================================================================================
+Plug 'scrooloose/syntastic'
+	set statusline+=%#warningmsg#
+	set statusline+=%{SyntasticStatuslineFlag()}
+	set statusline+=%*
+
+	let g:syntastic_always_populate_loc_list = 1
+	let g:syntastic_auto_loc_list = 1
+	let g:syntastic_check_on_open = 1
+	let g:syntastic_check_on_wq = 0	
+
+"=============================================================================================================
+Plug 'bling/vim-airline'
+	let g:airline_powerline_fonts = 0
+	let g:airline_theme = 'bubblegum' "'molokai' 'luna'
+	if !exists('g:airline_symbols')
+  		let g:airline_symbols = {}
+	endif
+
+	let g:airline_left_sep = '»'
+	let g:airline_left_sep = '▶'
+	let g:airline_right_sep = '«'
+	let g:airline_right_sep = '◀'
+	let g:airline_symbols.linenr = '␊'
+	let g:airline_symbols.linenr = '␤'
+	let g:airline_symbols.linenr = '¶'
+	let g:airline_symbols.branch = '⎇'
+	let g:airline_symbols.paste = 'ρ'
+	let g:airline_symbols.paste = 'Þ'
+	let g:airline_symbols.paste = '∥'
+	let g:airline_symbols.whitespace = 'Ξ'
+	set laststatus=2
+	set fillchars+=stl:\ ,stlnc:\
+	set t_Co=256
+
+"=============================================================================================================
+" F12 Color Schemes
+Plug 'altercation/vim-colors-solarized'
+Plug 'flazz/vim-colorschemes'
+
+if has("gui_running")
+	set background=dark
+else
+	set background=light
+	let s:mycolors = ['jellybeans','obsidian']
+	"let s:mycolors = ['Monokai-chris','Monokai','bvemu','candyman','distinguished','elda','flatland','flatlandia','herald','herokudoc-','herokudoc','holokai','hybrid','iceberg','jelleybeans','jellybeans','kellys','landscape','lilypink','lizard256','mopkai','nazca','neverland-darker','neverland','obsidian','railscasts','rdark-terminal','seoul256','skittles_berry','smyck','synic','tir_black','twitchy','up','wombat256','wombat256mod','xterm16','yaml','zenburn']
+	let s:iterator = 0
+	function! NextColorScheme()
+		let s:iterator += 1
+		if s:iterator == len(s:mycolors)
+			let s:iterator = 0
+		endif
+		let color = s:mycolors[s:iterator]
+		execute 'colorscheme '.color
+		redraw
+		echo color
+	endfunction
+
+	command! NextColorScheme call NextColorScheme()
+	map <F12> :call NextColorScheme()<CR>
+endif
+call plug#end()
+
+
+if has("gui_running")
+	colorscheme solarized
+else
+	colorscheme jellybeans
+endif
+
+"eag命令用法：
+"Ctrl＋］  跳到当前光标下单词的标签
+"Ctrl＋O  返回上一个标签
+"Ctrl＋T  返回上一个标签
+":tag TagName 跳到TagName标签
+"以上命令是在当前窗口显示标签，当前窗口的文件替代为包标签的文件，当前窗口光标跳到标签位置。如果不希望在当前窗口显示标签，可以使用以下命令：
+":stag TagName 新窗口显示TagName标签，光标跳到标签处
+"Ctrl＋W + ］  新窗口显示当前光标下单词的标签，光标跳到标签处
+"当一个标签有多个匹配项时（函数 (或类中的方法) 被多次定义），":tags" 命令会跳转到第一处。如果在当前文件中存在匹配，那它将会被首先使用。
+"可以用这些命令在各匹配的标签间移动：
+":tfirst    到第一个匹配
+":[count]tprevious 向前 [count] 个匹配
+":[count]tnext  向后 [count] 个匹配
+":tlast    到最后一个匹配
+"或者使用以下命令选择要跳转到哪一个
+":tselect TagName
+"输入以上命令后，vim会为你展示一个选择列表。然后你可以输入要跳转到的匹配代号 (在第一列)。其它列的信息可以让你知道标签在何处被定义过。
+"以下命令将在预览窗口显示标签
+":ptag TagName 预览窗口显示TagName标签，光标跳到标签处
+"Ctrl＋W + }  预览窗口显示当前光标下单词的标签，光标跳到标签处
+":pclose   关闭预览窗口
+":pedit file.h 在预览窗口中编辑文件file.h（在编辑头文件时很有用）
+":psearch atoi 查找当前文件和任何包含文件中的单词并在预览窗口中显示匹配，在使用没有标签文件的库函数时十分有用。
+"=============================================================
+
+"NERDTree
+"在nerdtree窗口常用操作：(小写当前，大写root)
+"x.......Close the current nodes parent收起当前目录树
+"R.......Recursively refresh the current root刷新根目录树
+"r.......Recursively refresh the current directory刷新当前目录
+"P.......Jump to the root node
+"p.......Jump to current nodes parent
+"K.......Jump up inside directories at the current tree depth  到同目录第一个节点
+"J.......Jump down inside directories at the current tree depth 最后一个节点
+"o.......Open files, directories and bookmarks
+"i.......Open selected file in a split window上下分屏
+"s.......Open selected file in a new vsplit左右分屏
+"=============================================================
+
+
