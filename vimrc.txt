@@ -1,10 +1,10 @@
 " 39386078@qq.com
 " F2 tree
 " F3 ctags creation
-" F5 make[FileName] with [FileName].out when MakeFile Does Not Exist<CR>
+" F5 Run Program to first BP, may run after :(Lattach/:Ltarget-:Lstart)
 " Command+R Run
 " F6 step out
-" F7 step in
+" F7 step in to "THE" function call or to Current call Again.
 " F8 Break Point current line
 " F9 Mini buff Explorer— Pre File
 " F10 Mini buff Explorer - Next File
@@ -67,19 +67,14 @@ call plug#begin('~/.vim/plugged')
 Plug 'tpope/vim-pathogen'
 Plug 'gilligan/vim-lldb'
 
-" TODO:
-" ^+Command +Y " Pause/Continue
-map <F7> :Lnext<CR>
-map <F6> :Lstepin<CR> 
-" Continue to CurrentLine
-" Step Over
-" Step into
-" Step Out
-" Step Over Instruction
-" Step Over Thread
-" Step Into Instruction
-" Step Into Thread
-map <F8> :Lbreakpoint<CR> 
+map <F5> 		<Esc>:Lrun<CR>
+map <F6> 		<Esc>:Lnext<CR>
+map <C-F6> 		<Esc>:Lstepinst<CR>
+map <C-tab-F6> 	<Esc>:Lstepinstover<CR>
+map <F7> 		<Esc>:Lstep<CR>
+map <C-F7> 		<Esc>:Lstepin<CR>
+map <F8> 		<Esc>:Lfinish<CR>
+map <F9> 		<Esc>:Lbreakpoint<CR>	
 
 
 "=============================================================================================================
@@ -90,9 +85,6 @@ Plug 'Shougo/neocomplete'
 "=============================================================================================================
 Plug 'Valloric/YouCompleteMe'
 	let g:SuperTabDefaultCompletionType="context"
-"cd ~/.vim/bundle/YoucompleteMe
-"./install.py --clang-completer --system-libclang --system-boost --omnisharp-completer
-"cp third_party/ycmd/examples/.ycm_extra_conf.py ~/
 "=============================================================================================================
 
 Plug 'powerman/vim-plugin-viewdoc'
@@ -116,6 +108,10 @@ Plug 'a.vim'
 "Plug 'easymotion/vim-easymotion.vim'
 "Plug 'SirVer/ultisnips.vim'
 "Plug 'kien/rainbow_parentheses.vim'"
+
+"=============================================================================================================
+Plug 'Valloric/vim-indent-guides'
+
 "=============================================================================================================
 "Plug 'fholgado/minibufexpl.vim'
 "	hi MBENormal               guifg=#808080 guibg=fg
