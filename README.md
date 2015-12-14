@@ -14,7 +14,6 @@ wget -O ~/.vimrc https://raw.githubusercontent.com/39386078/my_vimrc/master/vimr
 
 #YouCompleteMe
 
-:!~/.vim/Plugged/YoucompleteMe/install.py --clang-completer --system-libclang --omnisharp-completer
+:!~/.vim/plugged/YouCompleteMe/install.py --clang-completer --system-libclang --omnisharp-completer --gocode-completer
 
-
-:!cp ~/.vim/Plugged/YoucompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py ~/
+:!cp ~/.vim/plugged/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py ~/
