@@ -194,7 +194,9 @@ Plug 'scrooloose/syntastic'
 	let g:syntastic_check_on_wq = 0	
 
 "=============================================================================================================
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
 	let g:airline_powerline_fonts = 0
 	let g:airline_theme = 'bubblegum' "'molokai' 'luna'
 	if !exists('g:airline_symbols')
